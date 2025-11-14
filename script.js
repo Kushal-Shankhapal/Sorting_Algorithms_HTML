@@ -91,12 +91,15 @@ const swapLineMap = {
   selection: 3
 };
 
-function highlightPseudoAt(algo, pseudoIndex) {
+function highlightPseudoAt(algo, pseudoIndex, colorClass = '') {
   const pseudoEl = document.getElementById("pseudocode");
   if (!pseudoEl) return;
   const meta = algorithms && algorithms[algo] ? algorithms[algo] : null;
   const rawLines = meta && meta.pseudocode ? meta.pseudocode.slice() : [];
-  pseudoEl.innerHTML = rawLines.map((l, i) => `<span class="${i === pseudoIndex ? 'highlight' : ''}">${l}</span>`).join("\n");
+  pseudoEl.innerHTML = rawLines.map((l, i) => {
+    const classes = i === pseudoIndex ? `highlight ${colorClass}`.trim() : '';
+    return `<span class="${classes}">${l}</span>`;
+  }).join("\n");
 }
 
 function updateCodeVisibility() {
@@ -159,7 +162,7 @@ codeToggle.addEventListener("change", () => {
 // initialize visibility on load
 updateCodeVisibility();
 
-function highlightLine(line) {
+function highlightLine(line, colorClass = '') {
   const lang = codeToggle.value;
   if (lang === "pseudo") {
     const algo = algorithmSelect.value;
@@ -170,7 +173,10 @@ function highlightLine(line) {
     // map recorded line index to pseudocode index if mapping exists
     const map = lineMap && lineMap[algo] ? lineMap[algo] : null;
     const target = (map && map[line] !== undefined) ? map[line] : line;
-    pseudoEl.innerHTML = rawLines.map((l, i) => `<span class="${i === target ? 'highlight' : ''}">${l}</span>`).join("\n");
+    pseudoEl.innerHTML = rawLines.map((l, i) => {
+      const classes = i === target ? `highlight ${colorClass}`.trim() : '';
+      return `<span class="${classes}">${l}</span>`;
+    }).join("\n");
   } else {
     // When not in pseudocode view we do not highlight code lines.
     return;
@@ -205,7 +211,7 @@ function recordSteps_Bubble(arr) {
     steps.push({ type: "line", line: 1 });
     for (let i = 0; i < arr.length - pass - 1; i++) {
       steps.push({ type: "line", line: 2 });
-      steps.push({ type: "compare", i, j: i + 1, pass, swaps: swapCounter });
+      steps.push({ type: "compare", i, j: i + 1, pass, swaps: swapCounter, line: 2 });
       if (arr[i] > arr[i + 1]) {
         steps.push({ type: "line", line: 3 });
         steps.push({ type: "swap", i, j: i + 1 });
@@ -230,7 +236,7 @@ function recordSteps_Selection(arr) {
     steps.push({ type: "line", line: 1 });
     for (let j = i + 1; j < arr.length; j++) {
       steps.push({ type: "line", line: 2 });
-      steps.push({ type: "compare", i, j, pass: i, swaps: swapCounter });
+      steps.push({ type: "compare", i, j, pass: i, swaps: swapCounter, line: 2 });
       if (arr[j] < arr[minIdx]) {
         steps.push({ type: "line", line: 3 });
         minIdx = j;
@@ -263,17 +269,24 @@ function applyStep(step) {
       indexJ.textContent = step.j;
       passCount.textContent = step.pass;
       swapCount.textContent = step.swaps;
+      // highlight pseudocode with compare color
+      if (codeToggle.value === 'pseudo') {
+        const algo = algorithmSelect.value;
+        const map = lineMap && lineMap[algo] ? lineMap[algo] : null;
+        const target = (map && map[step.line] !== undefined) ? map[step.line] : step.line;
+        highlightPseudoAt(algo, target, 'compare');
+      }
       break;
     case "swap":
       const bar1 = bars[step.i];
       const bar2 = bars[step.j];
       
       // Swap heights and values
-      // highlight the 'Swap' pseudocode line if showing pseudocode
+      // highlight the 'Swap' pseudocode line with swap color if showing pseudocode
       if (codeToggle.value === 'pseudo') {
         const algo = algorithmSelect.value;
         const pseudoIdx = swapLineMap && swapLineMap[algo] !== undefined ? swapLineMap[algo] : null;
-        if (pseudoIdx !== null) highlightPseudoAt(algo, pseudoIdx);
+        if (pseudoIdx !== null) highlightPseudoAt(algo, pseudoIdx, 'swap');
       }
 
       const tempHeight = bar1.style.height;
