@@ -83,7 +83,7 @@ Repeat until no swaps:
         color: "#0d0d0d"
       },
       particles: {
-        number: { value: 60 },
+        number: { value: 90 },
         color: { value: "#00ff00" },
         shape: { type: "circle" },
         opacity: { value: 0.5 },
@@ -104,15 +104,19 @@ Repeat until no swaps:
       },
       interactivity: {
         events: {
-          onhover: { enable: true, mode: "grab" },
+          onhover: { enable: true, mode: ["attract", "grab"] },
+          onclick: { enable: true, mode: "repulse" },
           resize: true
         },
         modes: {
-          grab: {
-            distance: 140,
+          connect: {
+            distance: 300,
             line_linked: {
               opacity: 0.6
             }
+          },
+          grab: {
+            distance: 150,
           }
         }
       },
