@@ -1,0 +1,142 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #121212;
+  color: #eee;
+}
+
+.network-background {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background: #111;
+  z-index: -1;
+}
+
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+header h1 {
+  text-align: center;
+  color: #90caf9;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+.input-group select,
+.input-group input {
+  padding: 8px;
+  font-size: 1rem;
+  border-radius: 4px;
+  border: none;
+  margin-right: 0.5rem;
+}
+
+.input-group button {
+  padding: 8px 12px;
+  font-size: 1rem;
+  background-color: #42a5f5;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+}
+
+.control-buttons button {
+  margin: 0 0.3rem;
+  padding: 8px 16px;
+  font-size: 1rem;
+  background-color: #26c6da;
+  border: none;
+  border-radius: 4px;
+  color: black;
+  cursor: pointer;
+}
+
+#speedRange {
+  vertical-align: middle;
+}
+
+.runtime-summary,
+.runtime-stats {
+  display: flex;
+  justify-content: space-evenly;
+  background-color: #1e1e1e;
+  padding: 0.5rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.main-panel {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.visual-area {
+  display: flex;
+  align-items: flex-end;
+  height: 300px;
+  background-color: #222;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  padding: 1rem;
+  flex-grow: 1;
+  min-width: 500px;
+}
+
+.bar {
+  margin: 0 5px;
+  width: 35px;
+  background-color: #64b5f6;
+  transition: height 0.3s ease, background-color 0.3s ease;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  color: white;
+  font-size: 0.9rem;
+}
+
+.bar.highlight {
+  background-color: #ffca28 !important;
+}
+
+.bar.swap {
+  background-color: #ef5350 !important;
+}
+
+.bar.sorted {
+  background-color: #66bb6a !important;
+}
+
+.code-panel {
+  background-color: #1e1e1e;
+  padding: 1rem;
+  border-radius: 6px;
+  font-family: 'Courier New', Courier, monospace;
+  white-space: pre;
+  font-size: 1rem;
+  overflow-x: auto;
+  max-height: 300px;
+  min-width: 300px;
+  flex-grow: 0;
+}
+
+#pseudocode .highlight {
+  background-color: #3949ab;
+  color: white;
+}

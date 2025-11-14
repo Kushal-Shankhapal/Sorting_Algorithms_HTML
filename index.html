@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sorting Visualizer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="network-background"></div>
+  <div class="app-container">
+    <header>
+      <h1>Sorting Visualizer</h1>
+    </header>
+
+    <section class="controls">
+      <div class="input-group">
+        <label for="algorithmSelect">Algorithm:</label>
+        <select id="algorithmSelect">
+          <option value="bubble">Bubble Sort</option>
+        </select>
+        <input type="text" id="arrayInput" placeholder="e.g. 29,10,14,37,14">
+        <button id="generateBtn">Random</button>
+        <button id="loadBtn">Load</button>
+      </div>
+      <div class="control-buttons">
+        <button id="startBtn">▶ Start</button>
+        <button id="stepBtn">⏭ Step</button>
+        <button id="resetBtn">🔄 Reset</button>
+        <label for="speedRange">Speed:</label>
+        <input type="range" min="100" max="1500" value="500" step="100" id="speedRange">
+      </div>
+    </section>
+
+    <section class="runtime-summary">
+      <p><strong>Original:</strong> <span id="originalArray">empty</span></p>
+      <p><strong>Sorted:</strong> <span id="sortedArray">empty</span></p>
+    </section>
+
+    <section class="runtime-stats">
+      <p><strong>Pass:</strong> <span id="passCount">0</span></p>
+      <p><strong>i:</strong> <span id="indexI">-</span></p>
+      <p><strong>j:</strong> <span id="indexJ">-</span></p>
+      <p><strong>Swaps:</strong> <span id="swapCount">0</span></p>
+    </section>
+
+    <main class="main-panel">
+      <section class="visual-area" id="arrayContainer"></section>
+      <section class="code-panel">
+        <pre id="pseudocode">
+while the list is not sorted:
+  assume it's sorted
+  for each pair (A[i], A[i+1]):
+    if A[i] > A[i+1]:
+      swap them
+      mark as not sorted
+        </pre>
+      </section>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
