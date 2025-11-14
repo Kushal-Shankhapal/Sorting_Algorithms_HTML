@@ -98,16 +98,18 @@ header h1 {
   appearance: none;
   width: 140px;
   height: 8px;
-  background: rgba(255,255,255,0.04);
+  background: rgba(255,255,255,0.12);
   border-radius: 6px;
   outline: none;
   margin-left: 6px;
+  border: 1px solid rgba(97,207,90,0.3);
 }
 
 #speedRange::-webkit-slider-runnable-track {
   height: 8px;
-  background: rgba(255,255,255,0.04);
+  background: rgba(255,255,255,0.12);
   border-radius: 6px;
+  border: 1px solid rgba(97,207,90,0.3);
 }
 
 #speedRange::-webkit-slider-thumb {
@@ -125,8 +127,9 @@ header h1 {
 
 #speedRange::-moz-range-track {
   height: 8px;
-  background: rgba(255,255,255,0.04);
+  background: rgba(255,255,255,0.12);
   border-radius: 6px;
+  border: 1px solid rgba(97,207,90,0.3);
 }
 
 #speedRange::-moz-range-thumb {
