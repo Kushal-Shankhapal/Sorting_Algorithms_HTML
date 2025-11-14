@@ -52,16 +52,26 @@ codeToggle.addEventListener("change", () => {
   } else if (lang === "java") {
     code = `void bubbleSort(int[] arr) {\n    int n = arr.length;\n    for (int i = 0; i < n-1; i++) {\n        for (int j = 0; j < n-i-1; j++) {\n            if (arr[j] > arr[j+1]) {\n                int temp = arr[j];\n                arr[j] = arr[j+1];\n                arr[j+1] = temp;\n            }\n        }\n    }\n}`;
   }
-  codeDisplay.textContent = code;
+  codeDisplay.innerHTML = code.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/(\bif\b|\bfor\b|\bwhile\b|\bswap\b|\bint\b|\breturn\b|\bdef\b|\bvoid\b|\bclass\b)/g, '<span class="highlight">$1</span>');
 });
 
 function highlightLine(line) {
-  const lines = pseudocode.innerText.split('\n');
-  pseudocode.innerHTML = lines.map((l, i) => `<span class="${i === line ? 'highlight' : ''}">${l}</span>`).join("\n");
+  const lang = codeToggle.value;
+  if (lang === "pseudo") {
+    const lines = pseudocode.innerText.split('\n');
+    pseudocode.innerHTML = lines.map((l, i) => `<span class="${i === line ? 'highlight' : ''}">${l}</span>`).join("\n");
+  } else {
+    const lines = codeDisplay.innerText.split('\n');
+    codeDisplay.innerHTML = lines.map((l, i) => {
+      const highlightedLine = l.replace(/(<span class="highlight">|<\/span>)/g, '');
+      return `<span class="${i === line ? 'highlight' : ''}">${highlightedLine}</span>`;
+    }).join("\n");
+  }
 }
 
 function generateRandomArray(length = 8) {
-  return Array.from({ length }, () => Math.floor(Math.random() * 90 + 10));
+  length = Math.min(length, 10);
+  return Array.from({ length }, () => Math.floor(Math.random() * 100 + 1));
 }
 
 function renderArray(arr) {
@@ -158,7 +168,12 @@ generateBtn.onclick = () => {
 };
 
 loadBtn.onclick = () => {
-  const values = arrayInput.value.split(",").map(x => parseInt(x.trim())).filter(n => !isNaN(n));
+  let values = arrayInput.value.split(",").map(x => parseInt(x.trim())).filter(n => !isNaN(n));
+  if (values.length > 10) {
+    values = values.slice(0, 10);
+    alert("Array size limited to 10. Only first 10 elements will be used.");
+  }
+  values = values.map(v => Math.min(Math.max(v, 1), 100));
   if (values.length > 0) {
     data = [...values];
     originalArrayText.textContent = JSON.stringify(data);
