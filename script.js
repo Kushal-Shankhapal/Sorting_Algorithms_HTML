@@ -26,7 +26,8 @@ let steps = [];
 let currentStep = 0;
 let interval = null;
 let finalSorted = [];
-let currentSpeed = 800;
+let currentSpeed = 400;
+let isPlaying = false;
 
 speedSlider.addEventListener("input", () => {
   currentSpeed = 1600 - parseInt(speedSlider.value);
@@ -132,16 +133,20 @@ function applyStep(step) {
       swapCount.textContent = step.swaps;
       break;
     case "swap":
-      const temp = bars[step.i].style.height;
-      bars[step.i].style.height = bars[step.j].style.height;
-      bars[step.j].style.height = temp;
+      const bar1 = bars[step.i];
+      const bar2 = bars[step.j];
+      
+      // Swap heights and values
+      const tempHeight = bar1.style.height;
+      bar1.style.height = bar2.style.height;
+      bar2.style.height = tempHeight;
 
-      const tempText = bars[step.i].innerText;
-      bars[step.i].innerText = bars[step.j].innerText;
-      bars[step.j].innerText = tempText;
+      const tempText = bar1.innerText;
+      bar1.innerText = bar2.innerText;
+      bar2.innerText = tempText;
 
-      bars[step.i].classList.add("swap");
-      bars[step.j].classList.add("swap");
+      bar1.classList.add("swap");
+      bar2.classList.add("swap");
       break;
   }
 }
@@ -151,6 +156,8 @@ function playSteps() {
   interval = setInterval(() => {
     if (currentStep >= steps.length) {
       clearInterval(interval);
+      isPlaying = false;
+      startBtn.textContent = "▶ Start";
       sortedArrayText.textContent = JSON.stringify(finalSorted);
       return;
     }
@@ -183,14 +190,42 @@ loadBtn.onclick = () => {
 };
 
 startBtn.onclick = () => {
-  currentStep = 0;
-  const copy = [...data];
-  finalSorted = recordSteps_Bubble(copy);
-  sortedArrayText.textContent = "sorting...";
-  playSteps();
+  if (isPlaying) {
+    // Pause
+    clearInterval(interval);
+    isPlaying = false;
+    startBtn.textContent = "▶ Start";
+  } else {
+    // Play
+    if (currentStep === 0) {
+      // Starting fresh
+      currentStep = 0;
+      const copy = [...data];
+      finalSorted = recordSteps_Bubble(copy);
+      sortedArrayText.textContent = "sorting...";
+    }
+    isPlaying = true;
+    startBtn.textContent = "⏸ Pause";
+    playSteps();
+  }
 };
 
 stepBtn.onclick = () => {
+  // If playing, pause first
+  if (isPlaying) {
+    clearInterval(interval);
+    isPlaying = false;
+    startBtn.textContent = "▶ Start";
+  }
+  
+  // If no steps recorded yet, record them
+  if (steps.length === 0 && currentStep === 0) {
+    const copy = [...data];
+    finalSorted = recordSteps_Bubble(copy);
+    sortedArrayText.textContent = "sorting...";
+  }
+  
+  // Execute next step
   if (currentStep < steps.length) {
     applyStep(steps[currentStep]);
     currentStep++;
@@ -201,8 +236,11 @@ stepBtn.onclick = () => {
 
 resetBtn.onclick = () => {
   clearInterval(interval);
+  isPlaying = false;
+  startBtn.textContent = "▶ Start";
   renderArray(data);
   currentStep = 0;
+  steps = [];
   passCount.textContent = "0";
   indexI.textContent = "-";
   indexJ.textContent = "-";
