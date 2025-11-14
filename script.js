@@ -17,19 +17,42 @@ const pseudocode = document.getElementById("pseudocode");
 const originalArrayText = document.getElementById("originalArray");
 const sortedArrayText = document.getElementById("sortedArray");
 
+const codeToggle = document.getElementById("codeToggle");
+const codeDisplay = document.getElementById("languageCode");
+const speedLabel = document.getElementById("speedLabel");
+
 let data = [];
 let steps = [];
 let currentStep = 0;
 let interval = null;
 let finalSorted = [];
-let currentSpeed = 500;
+let currentSpeed = 800;
 
 speedSlider.addEventListener("input", () => {
-  currentSpeed = parseInt(speedSlider.value);
+  currentSpeed = 1600 - parseInt(speedSlider.value);
+  const speedX = Math.round((1600 - currentSpeed) / 400);
+  speedLabel.textContent = `${speedX}x`;
   if (interval) {
     clearInterval(interval);
     playSteps();
   }
+});
+
+codeToggle.addEventListener("change", () => {
+  const lang = codeToggle.value;
+  let code = "";
+  pseudocode.style.display = lang === "pseudo" ? "block" : "none";
+  codeDisplay.style.display = lang === "pseudo" ? "none" : "block";
+  if (lang === "python") {
+    code = `def bubble_sort(arr):\n    n = len(arr)\n    for i in range(n):\n        for j in range(0, n-i-1):\n            if arr[j] > arr[j+1]:\n                arr[j], arr[j+1] = arr[j+1], arr[j]`;
+  } else if (lang === "c") {
+    code = `void bubbleSort(int arr[], int n) {\n    for (int i = 0; i < n-1; i++) {\n        for (int j = 0; j < n-i-1; j++) {\n            if (arr[j] > arr[j+1]) {\n                int temp = arr[j];\n                arr[j] = arr[j+1];\n                arr[j+1] = temp;\n            }\n        }\n    }\n}`;
+  } else if (lang === "cpp") {
+    code = `void bubbleSort(vector<int>& arr) {\n    int n = arr.size();\n    for (int i = 0; i < n-1; i++) {\n        for (int j = 0; j < n-i-1; j++) {\n            if (arr[j] > arr[j+1]) {\n                swap(arr[j], arr[j+1]);\n            }\n        }\n    }\n}`;
+  } else if (lang === "java") {
+    code = `void bubbleSort(int[] arr) {\n    int n = arr.length;\n    for (int i = 0; i < n-1; i++) {\n        for (int j = 0; j < n-i-1; j++) {\n            if (arr[j] > arr[j+1]) {\n                int temp = arr[j];\n                arr[j] = arr[j+1];\n                arr[j+1] = temp;\n            }\n        }\n    }\n}`;
+  }
+  codeDisplay.textContent = code;
 });
 
 function highlightLine(line) {

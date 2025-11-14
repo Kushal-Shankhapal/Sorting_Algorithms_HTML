@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Sorting Visualizer</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="network-background"></div>
+  <div id="tsparticles"></div>
+
   <div class="app-container">
     <header>
       <h1>Sorting Visualizer</h1>
@@ -19,16 +20,18 @@
         <select id="algorithmSelect">
           <option value="bubble">Bubble Sort</option>
         </select>
-        <input type="text" id="arrayInput" placeholder="e.g. 29,10,14,37,14">
+        <input type="text" id="arrayInput" placeholder="e.g. 29,10,14,37,14" />
         <button id="generateBtn">Random</button>
         <button id="loadBtn">Load</button>
       </div>
+
       <div class="control-buttons">
         <button id="startBtn">▶ Start</button>
         <button id="stepBtn">⏭ Step</button>
         <button id="resetBtn">🔄 Reset</button>
         <label for="speedRange">Speed:</label>
-        <input type="range" min="100" max="1500" value="500" step="100" id="speedRange">
+        <input type="range" min="100" max="1500" value="800" step="100" id="speedRange" />
+        <span id="speedLabel">1x</span>
       </div>
     </section>
 
@@ -46,18 +49,77 @@
 
     <main class="main-panel">
       <section class="visual-area" id="arrayContainer"></section>
+
       <section class="code-panel">
+        <div style="margin-bottom: 0.5rem;">
+          <label for="codeToggle">View in:</label>
+          <select id="codeToggle">
+            <option value="pseudo">Pseudocode</option>
+            <option value="python">Python</option>
+            <option value="c">C</option>
+            <option value="cpp">C++</option>
+            <option value="java">Java</option>
+          </select>
+        </div>
+
         <pre id="pseudocode">
-while the list is not sorted:
-  assume it's sorted
-  for each pair (A[i], A[i+1]):
-    if A[i] > A[i+1]:
-      swap them
-      mark as not sorted
+Repeat until no swaps:
+  Start a new pass
+  For each pair of adjacent numbers:
+    If left > right:
+      Swap them
+      Mark that a swap happened
+  Move to next pass
         </pre>
+
+        <pre id="languageCode" class="language-code" style="display: none;"></pre>
       </section>
     </main>
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.11.1/tsparticles.bundle.min.js"></script>
   <script src="script.js"></script>
+  <script>
+    tsParticles.load("tsparticles", {
+      background: {
+        color: "#0d0d0d"
+      },
+      particles: {
+        number: { value: 60 },
+        color: { value: "#00ff00" },
+        shape: { type: "circle" },
+        opacity: { value: 0.5 },
+        size: { value: 3 },
+        line_linked: {
+          enable: true,
+          distance: 150,
+          color: "#00ff00",
+          opacity: 0.4,
+          width: 1
+        },
+        move: {
+          enable: true,
+          speed: 2,
+          direction: "none",
+          out_mode: "bounce"
+        }
+      },
+      interactivity: {
+        events: {
+          onhover: { enable: true, mode: "grab" },
+          resize: true
+        },
+        modes: {
+          grab: {
+            distance: 140,
+            line_linked: {
+              opacity: 0.6
+            }
+          }
+        }
+      },
+      retina_detect: true
+    });
+  </script>
 </body>
 </html>
